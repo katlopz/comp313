@@ -9,7 +9,8 @@ namespace UnityStandardAssets._2D
     {
         private PlatformerCharacter2D m_Character;
         private bool m_Jump;
-
+        private bool inFuture = true;
+        private bool m_TimeTravel;
 
         private void Awake()
         {
@@ -19,10 +20,23 @@ namespace UnityStandardAssets._2D
 
         private void Update()
         {
+            if (!m_Jump && Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                m_Jump = true;
+            }
+
+            /**
             if (!m_Jump)
             {
                 // Read the jump input in Update so button presses aren't missed.
                 m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
+            }
+            **/
+
+            if (!m_TimeTravel && Input.GetKeyDown(KeyCode.Space))
+            {
+                m_TimeTravel = true;
+                inFuture = !inFuture;
             }
         }
 
@@ -33,8 +47,9 @@ namespace UnityStandardAssets._2D
             bool crouch = Input.GetKey(KeyCode.LeftControl);
             float h = CrossPlatformInputManager.GetAxis("Horizontal");
             // Pass all parameters to the character control script.
-            m_Character.Move(h, crouch, m_Jump);
+            m_Character.Move(h, crouch, m_Jump, m_TimeTravel, inFuture);
             m_Jump = false;
+            m_TimeTravel = false;
         }
     }
 }

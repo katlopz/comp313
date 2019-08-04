@@ -49,7 +49,7 @@ namespace UnityStandardAssets._2D
         }
 
 
-        public void Move(float move, bool crouch, bool jump)
+        public void Move(float move, bool crouch, bool jump, bool timeTravel, bool inFuture)
         {
             // If crouching, check to see if the character can stand up
             if (!crouch && m_Anim.GetBool("Crouch"))
@@ -96,6 +96,25 @@ namespace UnityStandardAssets._2D
                 m_Grounded = false;
                 m_Anim.SetBool("Ground", false);
                 m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
+            }
+
+            // If the player should time travel...
+            if (timeTravel)
+            {
+                // Change Y position...
+                Vector3 thePos = transform.localPosition;
+                thePos.y += 1; //so that they float a little when travelling
+
+                if (inFuture)
+                {
+                    thePos.y -= 10;
+           
+                }
+                else {
+                    thePos.y += 10;
+                    Console.WriteLine("+10");
+                }
+                transform.localPosition = thePos;
             }
         }
 
